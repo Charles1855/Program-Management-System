@@ -1,79 +1,40 @@
-# Handles all database creation and connections
-
 import sqlite3
 
-
 def connect_db():
-
-        return sqlite3.connect("mhub.db")
-
+    return sqlite3.connect("mhub.db")
 
 def create_tables():
-
     conn = connect_db()
-    cursor = conn.cursor()
+    cur = conn.cursor()
 
-    # USERS TABLE
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS users (
+    cur.execute("""CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL,
-        role TEXT NOT NULL,
-        created_at TEXT NOT NULL
-    )
-    """)
+        username TEXT,
+        password TEXT
+    )""")
 
-    # PARTICIPANTS TABLE
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS participants (
+    cur.execute("""CREATE TABLE IF NOT EXISTS participants (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        full_name TEXT NOT NULL,
-        gender TEXT,
-        phone TEXT,
-        email TEXT,
-        location TEXT,
-        date_registered TEXT NOT NULL
-    )
-    """)
+        full_name TEXT
+    )""")
 
-    # PROGRAMS TABLE
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS programs (
+    cur.execute("""CREATE TABLE IF NOT EXISTS programs (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        program_name TEXT NOT NULL,
-        description TEXT,
-        start_date TEXT,
-        end_date TEXT,
-        facilitator TEXT,
-        created_at TEXT NOT NULL
-    )
-    """)
+        program_name TEXT
+    )""")
 
-    # ENROLLMENTS TABLE
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS enrollments (
+    cur.execute("""CREATE TABLE IF NOT EXISTS enrollments (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        participant_id INTEGER,
+        program_id INTEGER
+    )""")
+
+    cur.execute("""CREATE TABLE IF NOT EXISTS attendance (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         participant_id INTEGER,
         program_id INTEGER,
-        enroll_date TEXT NOT NULL,
-        FOREIGN KEY (participant_id) REFERENCES participants(id),
-        FOREIGN KEY (program_id) REFERENCES programs(id)
-    )
-    """)
-
-    # ATTENDANCE TABLE
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS attendance (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        participant_id INTEGER,
-        program_id INTEGER,
-        date TEXT NOT NULL,
-        status TEXT NOT NULL,
-        FOREIGN KEY (participant_id) REFERENCES participants(id),
-        FOREIGN KEY (program_id) REFERENCES programs(id)
-    )
-    """)
+        status TEXT
+    )""")
 
     conn.commit()
     conn.close()

@@ -1,29 +1,28 @@
-
-# Main dashboard window
 import tkinter as tk
-from participants import open_participant_window
-from programs import open_program_window
-from enrollment import open_enrollment_window
-from attendance import open_attendance_window
-from reports import open_reports_window
+import participants, programs, enrollment, attendance, reports
 
+def dashboard_screen(root):
+    for w in root.winfo_children():
+        w.destroy()
 
-def open_dashboard(role):
-    dashboard = tk.Tk()
-    dashboard.title("MHub Program Management System - Dashboard")
-    dashboard.geometry("400x450")
-    dashboard.resizable(False, False)
+    frame = tk.Frame(root)
+    frame.pack(expand=True)
 
-    tk.Label(
-        dashboard,
-        text="MHub Program Management System",
-        font=("Arial", 14, "bold")
-    ).pack(pady=20)
+    tk.Label(frame, text="MHub Dashboard", font=("Arial", 16)).pack(pady=20)
 
-    tk.Button(dashboard, text="Manage Participants", width=25, command=open_participant_window).pack(pady=10)
-    tk.Button(dashboard, text="Manage Programs", width=25, command=open_program_window).pack(pady=10)
-    tk.Button(dashboard, text="Enroll Participants", width=25, command=open_enrollment_window).pack(pady=10)
-    tk.Button(dashboard, text="Attendance", width=25, command=open_attendance_window).pack(pady=10)
-    tk.Button(dashboard, text="View Reports", width=25, command=open_reports_window).pack(pady=10)
+    tk.Button(frame, text="Participants", width=25,
+              command=lambda: participants.screen(root, dashboard_screen)).pack(pady=5)
 
-    dashboard.mainloop()
+    tk.Button(frame, text="Programs", width=25,
+              command=lambda: programs.screen(root, dashboard_screen)).pack(pady=5)
+
+    tk.Button(frame, text="Enrollment", width=25,
+              command=lambda: enrollment.screen(root, dashboard_screen)).pack(pady=5)
+
+    tk.Button(frame, text="Attendance", width=25,
+              command=lambda: attendance.screen(root, dashboard_screen)).pack(pady=5)
+
+    tk.Button(frame, text="Reports", width=25,
+              command=lambda: reports.screen(root, dashboard_screen)).pack(pady=5)
+
+    tk.Button(frame, text="Exit", width=25, command=root.destroy).pack(pady=20)
