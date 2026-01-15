@@ -1,11 +1,11 @@
-# dashboard.py
-# Main dashboard window
 
+# Main dashboard window
 import tkinter as tk
 from participants import open_participant_window
 from programs import open_program_window
 from enrollment import open_enrollment_window
 from attendance import open_attendance_window
+from reports import open_reports_window
 
 
 def open_dashboard(role):
@@ -24,5 +24,6 @@ def open_dashboard(role):
     tk.Button(dashboard, text="Manage Programs", width=25, command=open_program_window).pack(pady=10)
     tk.Button(dashboard, text="Enroll Participants", width=25, command=open_enrollment_window).pack(pady=10)
     tk.Button(dashboard, text="Attendance", width=25, command=open_attendance_window).pack(pady=10)
+    tk.Button(dashboard, text="View Reports", width=25, command=open_reports_window).pack(pady=10)
 
     dashboard.mainloop()
