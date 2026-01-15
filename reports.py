@@ -1,24 +1,14 @@
 import tkinter as tk
-import sqlite3
+from database import cursor
 
-def screen(root, go_back):
-    for w in root.winfo_children():
-        w.destroy()
+def reports_screen(parent):
+    tk.Label(parent, text="Reports", font=("Arial", 14)).pack(pady=10)
 
-    frame = tk.Frame(root)
-    frame.pack(expand=True)
+    cursor.execute("SELECT COUNT(*) FROM participants")
+    participants = cursor.fetchone()[0]
 
-    tk.Label(frame, text="Reports", font=("Arial", 16)).pack(pady=10)
+    cursor.execute("SELECT COUNT(*) FROM programs")
+    programs = cursor.fetchone()[0]
 
-    conn = sqlite3.connect("mhub.db")
-    cur = conn.cursor()
-
-    cur.execute("SELECT COUNT(*) FROM participants")
-    tk.Label(frame, text=f"Participants: {cur.fetchone()[0]}").pack()
-
-    cur.execute("SELECT COUNT(*) FROM programs")
-    tk.Label(frame, text=f"Programs: {cur.fetchone()[0]}").pack()
-
-    conn.close()
-
-    tk.Button(frame, text="Back", command=lambda: go_back(root)).pack(pady=20)
+    tk.Label(parent, text=f"Total Participants: {participants}").pack()
+    tk.Label(parent, text=f"Total Programs: {programs}").pack()

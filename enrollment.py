@@ -1,27 +1,24 @@
 import tkinter as tk
-import sqlite3
+from database import cursor, conn
 
-def screen(root, go_back):
-    for w in root.winfo_children():
-        w.destroy()
+def enrollment_screen(parent):
+    tk.Label(parent, text="Enrollment", font=("Arial", 14)).pack(pady=10)
 
-    frame = tk.Frame(root)
-    frame.pack(expand=True)
-
-    tk.Label(frame, text="Enrollment", font=("Arial", 16)).pack(pady=10)
-
-    pid = tk.Entry(frame)
+    pid = tk.Entry(parent)
     pid.pack()
-    progid = tk.Entry(frame)
-    progid.pack()
+    pid.insert(0, "Participant ID")
+
+    prg = tk.Entry(parent)
+    prg.pack()
+    prg.insert(0, "Program ID")
 
     def enroll():
-        conn = sqlite3.connect("mhub.db")
-        cur = conn.cursor()
-        cur.execute("INSERT INTO enrollments VALUES (NULL, ?, ?)",
-                    (pid.get(), progid.get()))
+        cursor.execute(
+            "INSERT INTO enrollment (participant_id, program_id) VALUES (?, ?)",
+            (pid.get(), prg.get())
+        )
         conn.commit()
-        conn.close()
+        pid.delete(0, tk.END)
+        prg.delete(0, tk.END)
 
-    tk.Button(frame, text="Enroll", command=enroll).pack(pady=5)
-    tk.Button(frame, text="Back", command=lambda: go_back(root)).pack(pady=10)
+    tk.Button(parent, text="Enroll", command=enroll).pack(pady=5)

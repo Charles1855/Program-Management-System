@@ -1,24 +1,15 @@
 import tkinter as tk
-import sqlite3
+from database import cursor, conn
 
-def screen(root, go_back):
-    for w in root.winfo_children():
-        w.destroy()
+def programs_screen(parent):
+    tk.Label(parent, text="Programs", font=("Arial", 14)).pack(pady=10)
 
-    frame = tk.Frame(root)
-    frame.pack(expand=True)
-
-    tk.Label(frame, text="Programs", font=("Arial", 16)).pack(pady=10)
-
-    program = tk.Entry(frame)
-    program.pack()
+    entry = tk.Entry(parent)
+    entry.pack()
 
     def save():
-        conn = sqlite3.connect("mhub.db")
-        cur = conn.cursor()
-        cur.execute("INSERT INTO programs VALUES (NULL, ?)", (program.get(),))
+        cursor.execute("INSERT INTO programs (name) VALUES (?)", (entry.get(),))
         conn.commit()
-        conn.close()
+        entry.delete(0, tk.END)
 
-    tk.Button(frame, text="Save", command=save).pack(pady=5)
-    tk.Button(frame, text="Back", command=lambda: go_back(root)).pack(pady=10)
+    tk.Button(parent, text="Add Program", command=save).pack(pady=5)

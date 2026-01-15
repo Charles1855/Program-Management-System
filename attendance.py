@@ -1,27 +1,24 @@
 import tkinter as tk
-import sqlite3
+from database import cursor, conn
 
-def screen(root, go_back):
-    for w in root.winfo_children():
-        w.destroy()
+def attendance_screen(parent):
+    tk.Label(parent, text="Attendance", font=("Arial", 14)).pack(pady=10)
 
-    frame = tk.Frame(root)
-    frame.pack(expand=True)
-
-    tk.Label(frame, text="Attendance", font=("Arial", 16)).pack(pady=10)
-
-    pid = tk.Entry(frame)
+    pid = tk.Entry(parent)
     pid.pack()
-    progid = tk.Entry(frame)
-    progid.pack()
+    pid.insert(0, "Participant ID")
+
+    prg = tk.Entry(parent)
+    prg.pack()
+    prg.insert(0, "Program ID")
 
     def mark():
-        conn = sqlite3.connect("mhub.db")
-        cur = conn.cursor()
-        cur.execute("INSERT INTO attendance VALUES (NULL, ?, ?, 'Present')",
-                    (pid.get(), progid.get()))
+        cursor.execute(
+            "INSERT INTO attendance (participant_id, program_id, status) VALUES (?, ?, 'Present')",
+            (pid.get(), prg.get())
+        )
         conn.commit()
-        conn.close()
+        pid.delete(0, tk.END)
+        prg.delete(0, tk.END)
 
-    tk.Button(frame, text="Mark", command=mark).pack(pady=5)
-    tk.Button(frame, text="Back", command=lambda: go_back(root)).pack(pady=10)
+    tk.Button(parent, text="Mark Present", command=mark).pack(pady=5)
