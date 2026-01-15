@@ -1,13 +1,20 @@
+# Handles all database creation and connections
+
 import sqlite3
 
+
 def connect_db():
-    return sqlite3.connect("mhub.db")
+
+        return sqlite3.connect("mhub.db")
+
 
 def create_tables():
+
     conn = connect_db()
     cursor = conn.cursor()
 
-cursor.execute("""
+    # USERS TABLE
+    cursor.execute("""
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT UNIQUE NOT NULL,
@@ -17,7 +24,8 @@ cursor.execute("""
     )
     """)
 
-cursor.execute("""
+    # PARTICIPANTS TABLE
+    cursor.execute("""
     CREATE TABLE IF NOT EXISTS participants (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         full_name TEXT NOT NULL,
@@ -29,7 +37,8 @@ cursor.execute("""
     )
     """)
 
-cursor.execute("""
+    # PROGRAMS TABLE
+    cursor.execute("""
     CREATE TABLE IF NOT EXISTS programs (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         program_name TEXT NOT NULL,
@@ -41,7 +50,8 @@ cursor.execute("""
     )
     """)
 
-cursor.execute("""
+    # ENROLLMENTS TABLE
+    cursor.execute("""
     CREATE TABLE IF NOT EXISTS enrollments (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         participant_id INTEGER,
@@ -52,7 +62,8 @@ cursor.execute("""
     )
     """)
 
-cursor.execute("""
+    # ATTENDANCE TABLE
+    cursor.execute("""
     CREATE TABLE IF NOT EXISTS attendance (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         participant_id INTEGER,
@@ -64,5 +75,5 @@ cursor.execute("""
     )
     """)
 
-conn.commit()
-conn.close()
+    conn.commit()
+    conn.close()
